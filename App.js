@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Button, ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
 import { Listitem } from './components/ListItem';
 
 export default function App() {
@@ -18,8 +18,8 @@ export default function App() {
     }
     
   }
-const onItemPress=()=>{
-  alert(item)
+const onItemPress=(item)=>{
+  alert(item.datevalue)
 
 }
   return (
@@ -45,18 +45,18 @@ const onItemPress=()=>{
           />
           <Button title="Add Task" onPress={handleSubmit}/>
       </View>
-      <View>
+        <ScrollView>
           {listitem.map((item,index)=>{
             return(
               // <View style={{flexDirection:"row" , width:"50%" ,justifyContent:"space-between", alignItems:'center',padding:10}}>
               //   <Text key={index}>{item}</Text>
               //   <Button title='X' color='red' onPress={()=>deleteSubmit(index)} /> 
               // </View>
-              <Listitem item={item} index={index} listitem={listitem} setListitem={setListitem} onItemPress={onItemPress}/>
+              <Listitem item={item} index={index} listitem={listitem} setListitem={setListitem} onItemPress={()=>onItemPress(item)}/>
              
             )
           })}
-         </View>
+         </ScrollView>
     </View>
   );
 }

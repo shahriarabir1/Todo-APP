@@ -8,7 +8,7 @@ export const Listitem = (props) => {
   };
 
   return (
-    <TouchableWithoutFeedback>
+    <TouchableWithoutFeedback onPress={props.onItemPress}>
        <View
       style={{
         flexDirection: "row",
