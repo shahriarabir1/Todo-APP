@@ -4,13 +4,17 @@ import { Listitem } from './components/ListItem';
 
 export default function App() {
   const [inputvalue,setInputvalue]=useState('')
+  const [datevalue,setDate]=useState('')
   const [listitem,setListitem]=useState([]);
   const handleInput=(text)=>{
    setInputvalue(text)
   }
+  const handleDate=(text)=>{
+    setDate(text);
+  }
   const handleSubmit=()=>{
     if(inputvalue!==""){
-      setListitem([...listitem,inputvalue])
+      setListitem([...listitem,{inputvalue,datevalue}])
     }
     
   }
@@ -29,6 +33,15 @@ const onItemPress=()=>{
           width:"70%"
           }} onChangeText={text=>handleInput(text)}
           value={inputvalue}
+          />
+          <TextInput placeholder='dd/mm/yy' style={{
+          borderColor:"black",
+          borderBottomWidth:1 ,
+          padding:10,
+          width:"70%"
+          
+          }} onChangeText={text=>handleDate(text)}
+          value={datevalue}
           />
           <Button title="Add Task" onPress={handleSubmit}/>
       </View>
@@ -59,9 +72,10 @@ const styles = StyleSheet.create({
   inputView:{
     width:"100%",
     marginTop:10,
-    flexDirection:"row",
+    flexDirection:"column",
     justifyContent:'space-between',
     alignItems:"center",
-    padding:20
+    padding:20,
+    gap:10
   }
 });

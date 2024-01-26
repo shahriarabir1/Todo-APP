@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Button, Text, Touchable, TouchableHighlight } from "react-native";
+import { View, Button, Text,  TouchableWithoutFeedback } from "react-native";
 
 export const Listitem = (props) => {
   const deleteSubmit = (index) => {
@@ -8,7 +8,8 @@ export const Listitem = (props) => {
   };
 
   return (
-    <TouchableHighlight
+    <TouchableWithoutFeedback>
+       <View
       style={{
         flexDirection: "row",
         width: "50%",
@@ -18,12 +19,14 @@ export const Listitem = (props) => {
       }}
       onPress={props.onItemPress}
     >
-      <Text key={props.index}>{props.item}</Text>
+      <Text key={props.index}>{props.item.inputvalue}</Text>
       <Button
         title="X"
         color="red"
         onPress={() => deleteSubmit(props.index)}
       />
-    </TouchableHighlight>
+    </View>
+    </TouchableWithoutFeedback>
+   
   );
 };
