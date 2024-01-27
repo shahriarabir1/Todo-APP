@@ -1,21 +1,25 @@
 import React from "react";
-import { View, Button, Text,  TouchableWithoutFeedback } from "react-native";
-
+import { View, Button, Text, TouchableHighlight } from "react-native";
+import { useDispatch } from "react-redux";
+import { REMOVE } from "../redux/reducer";
 export const Listitem = (props) => {
+  const dispatch=useDispatch();
   const deleteSubmit = (index) => {
-    const updatedList = props.listitem.filter((_, i) => i !== index);
-    props.setListitem(updatedList); // Use the setListitem prop from the parent component
+    dispatch(REMOVE(index));
+     // Use the setListitem prop from the parent component
   };
 
   return (
-    <TouchableWithoutFeedback onPress={props.onItemPress}>
+    <TouchableHighlight onPress={props.onItemPress} style={{marginBottom:10}}>
        <View
       style={{
         flexDirection: "row",
-        width: "50%",
+        width: "80%",
         justifyContent: "space-between",
         alignItems: "center",
         padding: 10,
+        backgroundColor:"gray",
+        opacity:50
       }}
       onPress={props.onItemPress}
     >
@@ -26,7 +30,7 @@ export const Listitem = (props) => {
         onPress={() => deleteSubmit(props.index)}
       />
     </View>
-    </TouchableWithoutFeedback>
+    </TouchableHighlight>
    
   );
 };
