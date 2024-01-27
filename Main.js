@@ -67,7 +67,7 @@ if(selected!==null){
               //   <Text key={index}>{item}</Text>
               //   <Button title='X' color='red' onPress={()=>deleteSubmit(index)} /> 
               // </View>
-              <Listitem item={item} index={index} listitem={listitem}  onItemPress={onItemPress}/>
+              <Listitem key={index} item={item} index={index} listitem={listitem}  onItemPress={onItemPress}/>
              
             )
           })}
