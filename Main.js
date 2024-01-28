@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { Button, FlatList, ScrollView, StyleSheet, Text, TextInput, View} from 'react-native';
-import { Listitem } from './components/ListItem';
-import { ModalList } from './components/ModalList';
 import { useDispatch,useSelector } from 'react-redux';
 import { ADD } from './redux/reducer';
-export default function Main(props) {
+import ImagePickers from './components/ImagePicker';
+
+export default function Main() {
   const listitem=useSelector(state=>state.listitem)
+  const [image,setImage]=useState("")
   const dispatch=useDispatch();
   const [inputvalue,setInputvalue]=useState('')
   const [datevalue,setDate]=useState('')
@@ -21,24 +22,11 @@ export default function Main(props) {
     }
     
   }
-const [selected,setSelected]=useState(null);
-const onItemPress=()=>{
-  const select=listitem.find((key)=>{
-    if(key===key){
-      return(listitem)
-    }
-  });
-  setSelected(select)
 
-}
-let modal=null;
-if(selected!==null){
-  modal=<ModalList item={selected} setSelected={setSelected}/>
-}
   return (
     <View style={styles.container}>
       <Text>Add Your Tasks</Text>
-      {modal}
+  
       <View style={styles.inputView}>
         <TextInput placeholder='Add Task Here' style={{
           borderColor:"black",
@@ -57,10 +45,10 @@ if(selected!==null){
           }} onChangeText={text=>handleDate(text)}
           value={datevalue}
           />
-         
+         <ImagePickers image={image} setImage={setImage}/>
           <Button title="Add Task" onPress={handleSubmit}/>
       </View>
-        <ScrollView>
+        {/* <ScrollView>
           {listitem.map((item,index)=>{
             return(
               // <View style={{flexDirection:"row" , width:"50%" ,justifyContent:"space-between", alignItems:'center',padding:10}}>
@@ -71,12 +59,10 @@ if(selected!==null){
              
             )
           })}
-         </ScrollView>
+         </ScrollView> */}
          {/* <FlatList data={listitem} renderItem={(info)=>{
           return(<Listitem item={info.item}  listitem={listitem} setListitem={setListitem} onItemPress={()=>onItemPress(item)}/>)
          }}/> */}
-         
-        
     </View>
   );
 }
