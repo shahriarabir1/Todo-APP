@@ -7,7 +7,7 @@ const counterSlice=createSlice({
     },
     reducers:{
         ADD:(state,action)=>{
-            state.listitem.push({ inputvalue: action.payload.inputvalue,datevalue:action.payload.datevalue });
+            state.listitem.push({ inputvalue: action.payload.inputvalue,datevalue:action.payload.datevalue,image:action.payload.image });
         },
         REMOVE:(state,action)=>{
             state.listitem.splice(action.payload,1)

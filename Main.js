@@ -2,11 +2,10 @@ import { useState } from 'react';
 import { Button, FlatList, ScrollView, StyleSheet, Text, TextInput, View} from 'react-native';
 import { useDispatch,useSelector } from 'react-redux';
 import { ADD } from './redux/reducer';
-import ImagePickers from './components/ImagePicker';
+import ImageCollector from './components/ImageCollector';
 
 export default function Main() {
-  const listitem=useSelector(state=>state.listitem)
-  const [image,setImage]=useState("")
+  const [image, setImage] = useState(null);
   const dispatch=useDispatch();
   const [inputvalue,setInputvalue]=useState('')
   const [datevalue,setDate]=useState('')
@@ -18,8 +17,29 @@ export default function Main() {
   }
   const handleSubmit=()=>{
     if(inputvalue!==""){
-      dispatch(ADD({inputvalue,datevalue}));
+      dispatch(ADD({inputvalue,datevalue,image}));
+      const taskData = {
+        inputvalue,
+        datevalue,
+        image: image || null,
+      };
+  
+      fetch("https://add-todo-5c667-default-rtdb.firebaseio.com/tasks.json", {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(taskData),
+      })
+      .then(response => response.json())
+      .then(data => {
+        alert("Data added successfully:");
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
     }
+    
     
   }
 
@@ -45,7 +65,7 @@ export default function Main() {
           }} onChangeText={text=>handleDate(text)}
           value={datevalue}
           />
-         <ImagePickers image={image} setImage={setImage}/>
+         <ImageCollector image={image} setImage={setImage}/>
           <Button title="Add Task" onPress={handleSubmit}/>
       </View>
         {/* <ScrollView>
