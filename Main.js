@@ -5,6 +5,7 @@ import { ADD } from './redux/reducer';
 import ImageCollector from './components/ImageCollector';
 
 export default function Main() {
+  const token=useSelector(state=>state.token)
   const [image, setImage] = useState(null);
   const dispatch=useDispatch();
   const [inputvalue,setInputvalue]=useState('')
@@ -15,16 +16,14 @@ export default function Main() {
   const handleDate=(text)=>{
     setDate(text);
   }
-  const handleSubmit=()=>{
+  const handleSubmit=async()=>{
     if(inputvalue!==""){
-      dispatch(ADD({inputvalue,datevalue,image}));
       const taskData = {
         inputvalue,
         datevalue,
         image: image || null,
       };
-  
-      fetch("https://add-todo-5c667-default-rtdb.firebaseio.com/tasks.json", {
+     await fetch(`https://add-todo-5c667-default-rtdb.firebaseio.com/tasks.json?auth=${token}`, {
         method: "POST",
         headers: {
           'Content-Type': 'application/json',
@@ -33,11 +32,14 @@ export default function Main() {
       })
       .then(response => response.json())
       .then(data => {
+        dispatch(ADD(taskData));
         alert("Data added successfully:");
       })
       .catch(error => {
         console.error('Error:', error);
       });
+      
+  
     }
     
     

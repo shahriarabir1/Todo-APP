@@ -1,8 +1,19 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import { View, Text, Button, StyleSheet, TouchableOpacity } from 'react-native'
 import { TextInput } from 'react-native-gesture-handler'
-
+import { useDispatch,useSelector } from 'react-redux'
+import { AddToken, Authenticate } from '../redux/reducer'
+import { useIsFocused } from '@react-navigation/native'
 const Login = (props) => {
+  const isFocus=useIsFocused();
+ 
+  const isAuth=useSelector(state=>state.isAuth)
+  useEffect(() => {
+
+   
+  }, [isAuth]);
+  const dispatch=useDispatch()
+
   const [authstate, setAuthstate] = useState({
     mode: 'login',
     inputs: {
@@ -11,6 +22,19 @@ const Login = (props) => {
       confirm_password: ""
     }
   })
+  useEffect(()=>{
+    setAuthstate(
+      {
+         ...authstate,
+    inputs:{
+      email:"",
+      password:"",
+      confirm_password:""
+    }
+      }
+    )
+   
+  },[isFocus])
   const changeMode = () => {
     setAuthstate({
       ...authstate, mode: authstate.mode === 'login' ? 'Sign up' : 'login'
@@ -51,9 +75,15 @@ const Login = (props) => {
               });
   
               if (response.ok) {
+                dispatch(Authenticate(true))
                 const data = await response.json();
-                alert("Sign Up complete") // Check the response from Firebase
-                props.navigation.navigate('Home');
+                if (isAuth) {
+                  alert("Sign up completed")
+                  props.navigation.navigate('Home');
+                } else {
+                  alert("You are not permitted");
+                }
+                
               } else {
                 const errorData = await response.json();
                 console.error('Error:', errorData.error.message);
@@ -65,7 +95,36 @@ const Login = (props) => {
             alert('Password not correct');
           }
         } else {
-          props.navigation.navigate('Home');
+          try {
+            const response = await fetch('https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAf7xiPk9pZH5VrMlO8J0P-dBwoNBir_xs', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                email,
+                password,
+                returnSecureToken: true,
+              }),
+            });
+
+            if (response.ok) {
+              dispatch(Authenticate(true))
+              const data = await response.json();
+             await dispatch(AddToken(data.idToken))
+              if (isAuth) {
+                props.navigation.navigate('Home');
+              } else {
+                alert("You are not permitted");
+              }
+            
+            } else {
+              const errorData = await response.json();
+              console.error('Error:', errorData.error.message);
+            }
+          } catch (error) {
+            console.log('Fetch error:', error);
+          }
         }
       } else {
         alert('Email is not valid');
